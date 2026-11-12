@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026 국내 자동차 시장동향</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: header → 4 KPI tiles → market-size chart + rivals compare → trend strip (price / rental / lounge) → data gaps → actions → sources */
+:root{
+  --bg:#f4f5f3; --surface:#ffffff; --ink:#151a1e; --muted:#5b6670; --line:#dde1df;
+  --accent:#0d6b5e; --accent-soft:#e1efeb; --rival:#8a96a0; --warn:#b4570f; --warn-soft:#fbeadc;
+  --display:"IBM Plex Sans KR","Noto Sans KR",system-ui,sans-serif;
+  --body:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161a; --surface:#1a2126; --ink:#eef1f0; --muted:#9aa6ad; --line:#2c353b;
+    --accent:#4fc3ad; --accent-soft:#18332e; --rival:#6f7b84; --warn:#f0a35e; --warn-soft:#3a2a1b; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161a; --surface:#1a2126; --ink:#eef1f0; --muted:#9aa6ad; --line:#2c353b;
+  --accent:#4fc3ad; --accent-soft:#18332e; --rival:#6f7b84; --warn:#f0a35e; --warn-soft:#3a2a1b; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 48px;display:grid;gap:20px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.3}
+h1{font-size:28px} h2{font-size:18px} h3{font-size:15px}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
+.sub{font-size:12px;font-weight:700;color:var(--muted)}
+.est{font-size:11px;font-weight:700;color:var(--warn);background:var(--warn-soft);border-radius:99px;padding:1px 8px;white-space:nowrap}
+.pill{font-size:12px;font-weight:700;border-radius:99px;padding:2px 10px;white-space:nowrap;background:var(--accent-soft);color:var(--accent)}
+
+header{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+.eyebrow{font-size:13px;font-weight:700;color:var(--accent)}
+.conf{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:3px 10px}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:4px;align-content:start}
+.kpi .v{font-family:var(--display);font-size:32px;font-weight:700;line-height:1.15}
+.kpi .v small{font-size:15px;font-weight:500;margin-left:2px}
+.kpi .l{font-size:13px;color:var(--muted)}
+.kpi.flat .v{color:var(--warn)} .kpi.us .v{color:var(--accent)}
+
+.two{display:grid;grid-template-columns:1.1fr 1fr;gap:16px}
+.chart-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+svg text{font-family:var(--body)}
+
+.vs{display:grid;gap:18px}
+.vs-row{display:grid;gap:8px}
+.vs-bar{display:grid;grid-template-columns:76px 1fr 86px;gap:10px;align-items:center;font-size:13px}
+.track{height:18px;background:var(--bg);border-radius:4px;overflow:hidden}
+.fill{height:100%;border-radius:4px}
+.fill.us{background:var(--accent)} .fill.rv{background:var(--rival)}
+.verdict{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.verdict div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px}
+.verdict b{display:block;font-family:var(--display);font-size:15px}
+
+.trends{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.trend{display:grid;gap:12px;align-content:start}
+.shift{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+.shift div{border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45}
+.shift .from{background:var(--bg);color:var(--muted)}
+.shift .to{background:var(--accent-soft);color:var(--ink);font-weight:500}
+.shift .arr{color:var(--muted);font-size:14px}
+.trend p{margin:0;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;border:1px solid var(--line);border-radius:99px;padding:2px 10px;color:var(--muted)}
+
+.gap{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;border:1px dashed var(--warn);background:var(--warn-soft);border-radius:12px;padding:14px 18px;font-size:14px}
+.gap b{color:var(--warn)}
+
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.act{display:grid;gap:8px;align-content:start}
+.act .n{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--surface);font-weight:700;font-family:var(--display)}
+.act .why{font-size:13px;color:var(--muted)}
+.act p{margin:0;font-size:14px}
+
+.sources{font-size:13px;margin:0;padding-left:18px;columns:2;column-gap:28px}
+.sources a{color:var(--accent)}
+.sources a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+@media (max-width:900px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .two,.trends,.actions{grid-template-columns:1fr}
+  .sources{columns:1}
+}
+@media (max-width:420px){ .kpi .v{font-size:28px} .vs-bar{grid-template-columns:64px 1fr 76px} }
+
+:root{--crit:#a52a2a;--crit-soft:#f7e1e0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--crit:#f08a85;--crit-soft:#3b2222}}
+:root[data-theme="dark"]{--crit:#f08a85;--crit-soft:#3b2222}
+.kpi.crit .v{color:var(--crit)}
+.fill.crit{background:var(--crit)} .fill.warn{background:var(--warn)}
+.brand{display:grid;gap:10px}
+.bcard{border-radius:10px;padding:12px 14px;display:grid;gap:2px}
+.bcard b{font-family:var(--display);font-size:17px}
+.bcard span{font-size:13px;color:var(--muted)}
+.bcard.up{background:var(--accent-soft)} .bcard.up b{color:var(--accent)}
+.bcard.mid{border:1px solid var(--line)}
+.bcard.down{background:var(--crit-soft)} .bcard.down b{color:var(--crit)}
+.big{font-family:var(--display);font-size:40px;font-weight:700;line-height:1.1}
+.stat{display:grid;gap:6px;align-content:start}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.deadline{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;background:var(--warn-soft);border-radius:12px;padding:16px 20px}
+.deadline .d{font-family:var(--display);font-size:26px;font-weight:700;color:var(--warn)}
+.deadline p{margin:0;font-size:14px;flex-basis:100%}
+.legend{display:grid;gap:4px;font-size:14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
+.donut{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+th{font-size:12px;color:var(--muted);font-weight:700}
+.tablewrap{overflow-x:auto}
+@media (max-width:900px){.three{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <div class="eyebrow">시장동향 · 2026년 11월 11일 기준</div>
+    <h1>2026 국내 자동차 시장동향</h1>
+    <p class="muted" style="margin:4px 0 0;font-size:14px">공개 기사·협회 발표 기반 · 9~10월 수치는 추석 연휴 영향으로 전년 비교 주의</p>
+  </div>
+  <span class="conf">출처 13건</span>
+</header>
+
+<section class="kpis" aria-label="핵심 지표">
+  <div class="kpi flat"><div class="v num">+1.3<small>%</small></div><div class="l">상반기 신규 등록 85만 636대, 사실상 제자리</div></div>
+  <div class="kpi us"><div class="v num">1<small>위</small></div><div class="l">10월 내수 기아, 현대차 제치고 1위 (+27.5%)</div></div>
+  <div class="kpi"><div class="v num">25.9<small>%</small></div><div class="l">6월 수입차 점유율, 사상 첫 25% 돌파</div></div>
+  <div class="kpi crit"><div class="v num">41.2<small>%</small></div><div class="l">상반기 수입차 중 중국산, 독일 제치고 1위</div></div>
+</section>
+
+<section class="card" style="background:var(--accent-soft);border-color:transparent;display:grid;gap:6px">
+  <div class="sub" style="color:var(--accent)">한 줄 요약</div>
+  <p style="margin:0;font-size:18px;font-weight:700;font-family:var(--display)">시장 전체는 크게 늘지 않았는데, 안에서 차의 종류(전기차)와 국적(수입·중국산)이 빠르게 바뀌고 있습니다.</p>
+</section>
+
+<section class="two">
+  <div class="card" style="display:grid;gap:14px">
+    <div class="chart-head"><h2>내수 규모 — 성장보다 교체</h2></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>구분</th><th>수치</th><th>출처</th></tr></thead>
+      <tbody>
+        <tr><td>2026 상반기 신규 등록</td><td class="num"><b>85만 636대</b>, +1.3%</td><td>KAMA</td></tr>
+        <tr><td>1분기 내수 누적</td><td class="num"><b>40만 9천 대</b>, +5.3%</td><td>산업통상부</td></tr>
+        <tr><td>9~10월</td><td>추석 연휴로 생산·내수 동반 감소</td><td>산업통상부·각사</td></tr>
+      </tbody>
+    </table></div>
+    <div>
+      <div class="sub" style="margin-bottom:6px">시장을 버틴 힘 (KAMA 분석)</div>
+      <div class="chips"><span class="chip">전기차 보조금 조기 집행</span><span class="chip">개소세 감면 일몰 전 출고 집중</span><span class="chip">법인·렌터카 수요 확대</span></div>
+    </div>
+    <p style="margin:0;font-size:13px;color:var(--warn)">악조건: 중동전쟁 장기화에 따른 고유가·고환율, 부품공급 차질</p>
+  </div>
+
+  <div class="card" style="display:grid;gap:14px">
+    <div class="chart-head"><h2>국산 브랜드 판도</h2><span class="pill">2026년 10월</span></div>
+    <div class="vs-row">
+      <div class="sub">10월 국내 판매 (대)</div>
+      <div class="vs-bar"><span><b>기아</b></span><div class="track"><div class="fill us" style="width:100%"></div></div><span class="num"><b>51,007</b></span></div>
+      <div class="vs-bar"><span>현대차</span><div class="track"><div class="fill rv" style="width:96.1%"></div></div><span class="num">49,042</span></div>
+    </div>
+    <div class="brand">
+      <div class="bcard up"><b>기아 +27.5%</b><span>5사 중 유일한 내수 성장, 내수 1위 탈환</span></div>
+      <div class="bcard mid"><b>현대차 -8.9%</b><span>5사 중 내수 감소 폭 최대, 2위로</span></div>
+      <div class="bcard down"><b>중견 3사 -35.1%</b><span>르노·KGM·한국GM, 올해 누적 내수 24% 이상 감소</span></div>
+    </div>
+    <p style="margin:0;font-size:13px" class="muted">10월 베스트셀링카 1위 스포티지 7,708대 · 2위 그랜저 6,989대 · 기아 3분기 글로벌 판매 역대 최다</p>
+  </div>
+</section>
+
+<section class="card" style="display:grid;gap:16px">
+  <div class="chart-head"><h2>파워트레인 — 하이브리드 주류, 전기차 질주</h2></div>
+  <div class="three">
+    <div class="stat"><div class="sub">하이브리드 신차 비중 (상반기)</div><div class="big num" style="color:var(--accent)">약 38%</div><span style="font-size:13px">주류가 됐지만 10월 보도 기준 내수가 처음으로 감소</span><span class="est" style="justify-self:start">2차 보도 인용치</span></div>
+    <div class="stat"><div class="sub">전기차 신차 비중 (올해)</div><div class="big" style="color:var(--warn)">4대 중 1대</div><span style="font-size:13px">전환지원금 신설, 지자체 보조금 조기 집행, 고유가 (KAMA)</span></div>
+    <div class="stat"><div class="sub">올해 전기차 등록 (대)</div>
+      <div class="vs-bar"><span><b>기아</b></span><div class="track"><div class="fill us" style="width:100%"></div></div><span class="num"><b>101,490</b></span></div>
+      <div class="vs-bar"><span>현대차</span><div class="track"><div class="fill rv" style="width:54.9%"></div></div><span class="num">55,733</span></div>
+      <span style="font-size:13px" class="muted">기아는 EV5·EV4·PV5로 10만 대 돌파, 현대차는 전기차 비중 12.7%</span>
+    </div>
+  </div>
+</section>
+
+<section class="two">
+  <div class="card" style="display:grid;gap:14px">
+    <div class="chart-head"><h2>수입차 — 테슬라·BYD가 판을 바꿨다</h2></div>
+    <div class="vs-row">
+      <div class="sub">상반기 수입차 등록 (대)</div>
+      <div class="vs-bar"><span><b>테슬라</b></span><div class="track"><div class="fill crit" style="width:100%"></div></div><span class="num"><b>56,139</b></span></div>
+      <div class="vs-bar"><span>BYD</span><div class="track"><div class="fill warn" style="width:20.8%"></div></div><span class="num">11,675</span></div>
+    </div>
+    <div class="verdict">
+      <div><b>테슬라 1위</b>수입차 점유율 30.5%, 전년 대비 +192%. 모델Y는 5월 전체 판매 1위</div>
+      <div><b>BYD 4위</b>렉서스·아우디 제침. 하반기 국고보조금 제외에도 자체 보조금으로 돌파</div>
+    </div>
+    <p style="margin:0;font-size:13px" class="muted">수입차 점유율 5월 25.8% → 6월 25.9% (2025년 연간 20.3%) · 상반기 수입차 등록 18만 4천 대 사상 최고 · 10월 신규 수입차 10대 중 약 3대가 테슬라</p>
+  </div>
+
+  <div class="card" style="display:grid;gap:14px">
+    <div class="chart-head"><h2>수입차 제조국 (상반기)</h2><span class="pill" style="background:var(--crit-soft);color:var(--crit)">중국 첫 1위</span></div>
+    <div class="donut">
+      <svg viewBox="0 0 160 160" width="170" height="170" role="img" aria-label="중국 41.2%, 독일 30.1%, 기타 28.7%">
+        <circle cx="80" cy="80" r="56" fill="none" stroke="var(--line)" stroke-width="26"/>
+        <circle cx="80" cy="80" r="56" fill="none" stroke="var(--crit)" stroke-width="26" stroke-dasharray="144.97 351.86" transform="rotate(-90 80 80)"/>
+        <circle cx="80" cy="80" r="56" fill="none" stroke="var(--rival)" stroke-width="26" stroke-dasharray="105.91 351.86" stroke-dashoffset="-144.97" transform="rotate(-90 80 80)"/>
+        <text x="80" y="78" text-anchor="middle" font-size="22" font-weight="700" fill="var(--crit)">41.2%</text>
+        <text x="80" y="98" text-anchor="middle" font-size="12" fill="var(--muted)">중국산</text>
+      </svg>
+      <div class="legend">
+        <span><i style="background:var(--crit)"></i><b>중국 41.2%</b></span>
+        <span><i style="background:var(--rival)"></i>독일 30.1%</span>
+        <span><i style="background:var(--line)"></i>기타 28.7%</span>
+      </div>
+    </div>
+    <p style="margin:0;font-size:14px">테슬라(중국 생산)와 BYD가 늘면서 수입차 = 독일차 공식이 깨졌습니다.</p>
+  </div>
+</section>
+
+<div class="deadline"><span class="d num">2026. 12. 31</span><b>하이브리드 개별소비세 감면 일몰</b><p>연말 출고 집중 → 내년 초 반짝 감소 가능성. 업계는 전기차 국내생산촉진세제, 지방 보조금 추가, 하이브리드 세제 연장을 요구 중입니다.</p></div>
+
+<section class="card" style="display:grid;gap:16px">
+  <h2>시장에서 읽히는 흐름 3가지</h2>
+  <div class="actions">
+    <div class="act"><span class="n">1</span><h3>교체되는 시장</h3><p>얼마나 파느냐보다 무엇이 바뀌느냐. 총량은 정체, 전기차·수입차로 교체.</p></div>
+    <div class="act"><span class="n">2</span><h3>가성비 전기차의 공습</h3><p>테슬라 모델Y 4,999만원~, BYD 2천만원대 소형차가 국산 전기차와 가격대가 겹칩니다.</p></div>
+    <div class="act"><span class="n">3</span><h3>국산 내부 양극화</h3><p>기아는 신차·전기차로 질주, 현대차는 주춤, 중견 3사는 급감.</p></div>
+  </div>
+</section>
+
+<section class="card" style="display:grid;gap:10px">
+  <h2>출처</h2>
+  <ul class="sources">
+    <li><a href="https://www.autoview.co.kr/ko-kr/articles/101241">오토뷰 — KAMA 2026 상반기 신규등록현황 분석</a></li>
+    <li><a href="https://www.koreabizreview.com/articles/kbr-news-import-3-1-2026-ev-20260609-wjsw">Korea Business Review — 2026 1분기 공식 통계와 수입 전기차</a></li>
+    <li><a href="https://web.getcha.kr/blog/hyundai-kia-sales-contrast-20261103">겟차 — 기아 10월 판매 27.5% 급증, 현대차 8.9% 감소</a></li>
+    <li><a href="https://www.insight.co.kr/news/581195">인사이트 — 중견 3사 10월 내수 35.1% 급감</a></li>
+    <li><a href="https://khan.co.kr/article/202610011702001">경향신문 — 기아 3분기 역대 최다 판매</a></li>
+    <li><a href="https://khan.co.kr/article/202610132102045">경향신문 — 하이브리드 내수 첫 감소, 4대 중 1대는 전기차</a></li>
+    <li><a href="https://khan.co.kr/article/202610131117001">경향신문 — 기아·현대 전기차 등록 현황</a></li>
+    <li><a href="https://www.eacar.co.kr/article/223820849126">이어카 — 하이브리드 비중 38%, 개소세 감면 일몰</a></li>
+    <li><a href="https://news.jkn.co.kr/post/939174">재경일보 — 수입차 점유율 25% 돌파, 테슬라·BYD</a></li>
+    <li><a href="https://www.wikitree.co.kr/articles/1150268">위키트리 — 중국산 수입차 41.2%로 독일 제쳐</a></li>
+    <li><a href="https://zdnet.co.kr/view?no=20261104133637">지디넷코리아 — 10월 수입차 10대 중 3대 테슬라</a></li>
+    <li><a href="https://www.newsis.com/view/NISX20260721_0003717744">뉴시스 — BYD 보조금 제외와 국내 안착</a></li>
+    <li><a href="https://www.ddaily.co.kr/page/view/2026080409131083655">디지털데일리 — KAMA 회장 정책 요구</a></li>
+  </ul>
+</section>
+
+</div>
+</body>
+</html>
